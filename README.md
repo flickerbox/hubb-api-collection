@@ -1,5 +1,5 @@
 # Hubb API Postman collection
-Thie is a simple Postman collection and envionment to do basic auth and API endpoint requests.
+This is a simple Postman collection and envionment to do basic auth and API endpoint requests.
 
 * Download the JSON files and import the collection and environment into your Postman APP.
 * Enter your client_id, client_secret, scope, and eventId into the environment variables. grant_type is always set to client_credentials per the Hubb API doc.
