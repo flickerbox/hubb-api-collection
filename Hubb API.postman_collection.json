@@ -26,7 +26,7 @@
 				"header": [
 					{
 						"key": "Content-Length",
-						"value": "155",
+						"value": "",
 						"type": "text"
 					},
 					{
@@ -79,6 +79,20 @@
 		},
 		{
 			"name": "Get Sessions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e9853bf9-c697-449e-bb99-543479807a97",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"// set session_id variable equal to the first session in the list.",
+							"pm.environment.set(\"session_id\", data[0].Id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -110,13 +124,27 @@
 						"v1",
 						"{{eventId}}",
 						"Sessions"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "Id  eq {{session_id}}",
+							"description": "Get just a single session back by ID",
+							"disabled": true
+						},
+						{
+							"key": "$filter",
+							"value": "Title eq 'A Path to Achieving Network Security ZEN'",
+							"description": "Get a single session back by title",
+							"disabled": true
+						}
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get Events",
+			"name": "Get Sessions Single",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -136,7 +164,60 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "https://ngapi.hubb.me/api/v1/Events",
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/Sessions/{{session_id}}",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"Sessions",
+						"{{session_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Events",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "53a538a5-9d58-40af-b396-0a558ae3d408",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"// set the eventId equal to the first event in the list.",
+							"pm.environment.set(\"eventId\", data[0].Id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/Events?",
 					"protocol": "https",
 					"host": [
 						"ngapi",
@@ -147,6 +228,172 @@
 						"api",
 						"v1",
 						"Events"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "Title eq 'Oktane19'",
+							"description": "Filter by title",
+							"disabled": true
+						},
+						{
+							"key": "$filter",
+							"value": "Id eq {{eventId}}",
+							"description": "Filter by a single event ID",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Event Profile",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/Profile",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"Profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Event Rooms",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/Rooms",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"Rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Event Rooms Single",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/Rooms/{{room_id}}",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"Rooms",
+						"{{room_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profiles",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/Profiles",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"Profiles"
 					]
 				}
 			},
@@ -191,7 +438,59 @@
 			"response": []
 		},
 		{
+			"name": "Get Users Single",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/Users/{{user_id}}",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"Users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Tracks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "be4a7d3b-33a6-415b-9a86-90b737087126",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"pm.environment.set(\"track_id\", data[0].Id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -223,6 +522,160 @@
 						"v1",
 						"{{eventId}}",
 						"Tracks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Tracks Single",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/Tracks/{{track_id}}",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"Tracks",
+						"{{track_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Meetings",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/Meetings",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"Meetings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get MeetingRequests",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/MeetingRequests",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"MeetingRequests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get MeetingRequests Single",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/MeetingRequests/",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"MeetingRequests",
+						""
 					]
 				}
 			},
@@ -305,7 +758,7 @@
 			"response": []
 		},
 		{
-			"name": "Get PropertyMetadata",
+			"name": "Get SessionTypes Single",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -325,7 +778,46 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/PropertyMetadata",
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/SessionTypes/{{session_type_id}}",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"SessionTypes",
+						"{{session_type_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get PropertyMetadata - Session",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/PropertyMetadata?$filter=Type eq 'Session'",
 					"protocol": "https",
 					"host": [
 						"ngapi",
@@ -337,6 +829,144 @@
 						"v1",
 						"{{eventId}}",
 						"PropertyMetadata"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "Type eq 'Session'"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get PropertyMetadata - User",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/PropertyMetadata?$filter=Type eq 'User'",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"PropertyMetadata"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "Type eq 'User'"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get PropertyValues - Session ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/PropertyValues?$filter=SessionId  eq {{session_id}}",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"PropertyValues"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "SessionId  eq {{session_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get PropertyValues - User ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://ngapi.hubb.me/api/v1/{{eventId}}/PropertyMetadata?$filter=UserId eq {{user_id}}",
+					"protocol": "https",
+					"host": [
+						"ngapi",
+						"hubb",
+						"me"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{eventId}}",
+						"PropertyMetadata"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "UserId eq {{user_id}}"
+						}
 					]
 				}
 			},
